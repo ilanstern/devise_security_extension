@@ -53,7 +53,10 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
     p "c"
     ap resource_name.to_sym
     p "d"
-    params.require(resource_name).permit!
+    params.require(resource_name)
+    p "e"
+    params.require(resource_name).permit(:current_password, :password, :password_confirmation)
+    p "f"
   end
 
   def scope
