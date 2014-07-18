@@ -1,16 +1,15 @@
 <h2>Renew your password</h2>
 
-<%= form_for(resource, :as => resource_name, :url => [resource_name, :password_expired], :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
+<%= devise_error_messages! %>
 
-  <p><%= f.label :current_password, "Current password" %><br />
-  <%= f.password_field :current_password %></p>
+ <%= semantic_form_for(resource, as: resource_name, url: [resource_name, :password_expired], :html => { :method => :put }) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :current_password,      as: :password, label: "Current password"%>
+    <%= f.input :password,              as: :password, label: "New password" %>
+    <%= f.input :password_confirmation, as: :password, label: "Password confirmation"%>
+  <% end %>
 
-  <p><%= f.label :password, "New password" %><br />
-  <%= f.password_field :password %></p>
-
-  <p><%= f.label :password_confirmation, "Confirm new password" %><br />
-  <%= f.password_field :password_confirmation %></p>
-
-  <p><%= f.submit "Change my password" %></p>
+  <%= f.actions do %>
+    <%= f.action :submit, "Change my password"%>
+  <% end %>
 <% end %>
