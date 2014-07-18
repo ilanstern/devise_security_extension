@@ -10,14 +10,41 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
     end
   end
 
+  def update_with_password(params, *options)
+    current_password = params.delete(:current_password)
+
+    p "a"
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    end
+
+    p "b"
+    result = if resource.valid_password?(current_password)
+      p "c"
+      resource.update_attributes(params, *options)
+    else
+      p "d"
+      resource.assign_attributes(params, *options)
+      resource.valid?
+      resource.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
+      false
+    end
+
+    clean_up_passwords
+    result
+  end
+
 
   def update
     p "1"
     warden.session(resource_name)[:password_confirmation] ||= SecureRandom.base64 #makes changing password mandatory
     p "2"
+    p resource_params
+    p resource
     ap resource_params
     ap resource
-    if resource.update_with_password(resource_params)
+    if update_with_password(resource_params)
       p "3"
       warden.session(resource_name)[:password_expired] = false
       p "4"
