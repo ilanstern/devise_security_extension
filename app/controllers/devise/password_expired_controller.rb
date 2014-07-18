@@ -1,4 +1,4 @@
-class Devise::PasswordExpiredController < DeviseController
+class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsController
   skip_before_filter :handle_password_change
   prepend_before_filter :authenticate_scope!, :only => [:show, :update]
 
