@@ -18,6 +18,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
     ap params
     ap resource
     ap resource_name
+    resource_params
     if resource.update_with_password(params)
       p "3"
       warden.session(resource_name)[:password_expired] = false
