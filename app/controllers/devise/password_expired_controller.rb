@@ -15,6 +15,8 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
     p "1"
     warden.session(resource_name)[:password_confirmation] ||= SecureRandom.base64 #makes changing password mandatory
     p "2"
+    ap resource_params
+    ap resource
     if resource.update_with_password(resource_params)
       p "3"
       warden.session(resource_name)[:password_expired] = false
