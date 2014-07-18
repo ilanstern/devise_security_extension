@@ -39,10 +39,10 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
   def update
     p "1"
     warden.session(resource_name)[:password_confirmation] ||= SecureRandom.base64 #makes changing password mandatory
-    p "23"
+    p "24"
     ap params
     ap resource
-    if self.update_password(resource_params)
+    if self.update_password(resource)
       p "3"
       warden.session(resource_name)[:password_expired] = false
       p "4"
@@ -66,9 +66,6 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
   end
 
   private
-    def resource_params
-      params.require(resource_name.to_sym).permit!
-    end
 
   def scope
     resource_name.to_sym
