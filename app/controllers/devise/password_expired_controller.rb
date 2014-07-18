@@ -4,7 +4,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
   def show
     if not resource.nil? and resource.need_change_password?
-      # respond_with(resource)
+      respond_with(resource)
     else
       redirect_to :root
     end
@@ -18,7 +18,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
       redirect_to stored_location_for(scope) || :root
     else
       clean_up_passwords(resource)
-      render :show
+      respond_with(resource, action: :show)
     end
   end
 
