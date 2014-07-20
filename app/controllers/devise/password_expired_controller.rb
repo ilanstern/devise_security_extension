@@ -15,9 +15,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
 
   def update
-    if needs_two_factor
-      two_factor_binding
-    elsif resource.update_with_password(params[:admin_user])
+    if resource.update_with_password(params[:admin_user])
       warden.session(resource_name)[:password_expired] = false
       set_flash_message :notice, :updated
       sign_in resource_name, resource, :bypass => true
@@ -39,6 +37,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
   def needs_two_factor
     signed_in?(scope) and warden.session(resource_name)[:need_two_factor_authentication]
   end
+
   def two_factor_binding
     handle_failed_second_factor(resource_name)
   end
