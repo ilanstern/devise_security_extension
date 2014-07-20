@@ -4,8 +4,7 @@ module DeviseSecurityExtension
       extend ActiveSupport::Concern
 
       included do
-        skip_before_filter :handle_two_factor_authentication, :handle_password_change
-        before_filter :handle_two_factor_authentication, :handle_password_change
+        before_filter :handle_password_change
       end
       
       module ClassMethods
@@ -27,6 +26,7 @@ module DeviseSecurityExtension
 
         # lookup if an password change needed
         def handle_password_change
+          handle_two_factor_authentication
           if not devise_controller? and not ignore_password_expire? and not request.format.nil? and request.format.html?
             Devise.mappings.keys.flatten.any? do |scope|
               if signed_in?(scope) and warden.session(scope)[:password_expired]
