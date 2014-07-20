@@ -15,7 +15,9 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
 
   def update
-    if resource.update_with_password(params[:admin_user])
+    if needs_two_factor
+      two_factor_binding
+    elsif resource.update_with_password(params[:admin_user])
       warden.session(resource_name)[:password_expired] = false
       set_flash_message :notice, :updated
       sign_in resource_name, resource, :bypass => true
@@ -29,7 +31,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
       redirect_to stored_location_for(resource_name) || redirection_path
     else
       clean_up_passwords(resource)
-      redirect_to :show
+      respond_with(resource, action: :show)
     end
   end
 
