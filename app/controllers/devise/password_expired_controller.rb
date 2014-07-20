@@ -4,7 +4,9 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
   before_filter         :handle_two_factor_authentication, :only => [:show, :update]
 
   def show
-    if not resource.nil? and resource.need_change_password?
+    if needs_two_factor
+      two_factor_binding
+    elsif not resource.nil? and resource.need_change_password?
       respond_with(resource)
     else
       redirect_to :root
@@ -13,7 +15,9 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
 
   def update
-    if resource.update_with_password(params[:admin_user])
+    if needs_two_factor
+      two_factor_binding
+    elsif resource.update_with_password(params[:admin_user])
       warden.session(resource_name)[:password_expired] = false
       set_flash_message :notice, :updated
       sign_in resource_name, resource, :bypass => true
@@ -32,6 +36,13 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
   end
 
   private
+  def needs_two_factor
+    signed_in?(scope) and warden.session(resource_name)[:need_two_factor_authentication]
+  end
+  def two_factor_binding
+    handle_failed_second_factor(resource_name)
+  end
+
   def scope
     resource_name.to_sym
   end
