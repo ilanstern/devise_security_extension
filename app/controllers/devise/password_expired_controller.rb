@@ -4,7 +4,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
   def show
     if not resource.nil? and resource.need_change_password?
-      # respond_with(resource)
+      respond_with(resource)
     else
       redirect_to :root
     end
@@ -12,7 +12,6 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
 
 
   def update
-    warden.session(resource_name)[:password_confirmation] ||= SecureRandom.base64 #makes changing password mandatory
     if resource.update_with_password(params[:admin_user])
       warden.session(resource_name)[:password_expired] = false
       set_flash_message :notice, :updated
@@ -27,7 +26,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
       redirect_to stored_location_for(resource_name) || redirection_path
     else
       clean_up_passwords(resource)
-      render :show
+      respond_with(resource)
     end
   end
 

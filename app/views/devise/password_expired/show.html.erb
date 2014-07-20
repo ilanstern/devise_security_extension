@@ -8,8 +8,10 @@
     <%= f.input :password,              as: :password, required: true, input_html: {required: true}, label: "Future password" %>
     <%= f.input :password_confirmation, as: :password, required: true, input_html: {required: true}, label: "Password confirmation"%>
   <% end %>
-
+  
   <%= f.actions do %>
     <%= f.action :submit, label: "Change my password"%>
   <% end %>
+
+  <%= link_to "Sign out", destroy_admin_user_session_path, :method => :delete %>
 <% end %>
