@@ -1,7 +1,7 @@
 class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsController
   skip_before_filter    :handle_password_change
   prepend_before_filter :authenticate_scope!, :only => [:show, :update]
-  prepend_before_filter Devise::TwoFactorAuthenticationController.handle_two_factor_authentication, :only => [:show, :update]
+  prepend_before_filter :handle_two_factor_authentication, :only => [:show, :update]
 
   def show
     if not resource.nil? and resource.need_change_password?
