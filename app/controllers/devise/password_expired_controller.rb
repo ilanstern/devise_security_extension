@@ -29,7 +29,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
       redirect_to stored_location_for(resource_name) || redirection_path
     else
       clean_up_passwords(resource)
-      respond_with(resource)
+      redirect_to :show
     end
   end
 
