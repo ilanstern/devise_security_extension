@@ -2,16 +2,18 @@
 
 <p><%= flash[:notice] %></p>
 
-<%= semantic_form_for(resource, as: resource_name, url: [resource_name, :password_expired], :html => { :method => :put }) do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :current_password,      as: :password, required: true, input_html: {required: true}, label: "Current password"%>
-    <%= f.input :password,              as: :password, required: true, input_html: {required: true}, label: "Future password" %>
-    <%= f.input :password_confirmation, as: :password, required: true, input_html: {required: true}, label: "Password confirmation"%>
+<div id="devise_renew_password">
+  <%= semantic_form_for(resource, as: resource_name, url: [resource_name, :password_expired], :html => { :method => :put }) do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :current_password,      as: :password, required: true, input_html: {required: true}, label: "Current password"%>
+      <%= f.input :password,              as: :password, required: true, input_html: {required: true}, label: "Future password" %>
+      <%= f.input :password_confirmation, as: :password, required: true, input_html: {required: true}, label: "Password confirmation"%>
+    <% end %>
+    
+    <%= f.actions do %>
+      <%= f.action :submit, label: "Change my password"%>
+    <% end %>
   <% end %>
-  
-  <%= f.actions do %>
-    <%= f.action :submit, label: "Change my password"%>
-  <% end %>
-<% end %>
 
-<%= link_to "Sign out", destroy_admin_user_session_path, :method => :delete %>
+  <%= link_to "Sign out", destroy_admin_user_session_path, class: "sign_out", :method => :delete %>
+</div>
