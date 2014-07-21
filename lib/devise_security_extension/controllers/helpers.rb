@@ -24,7 +24,7 @@ module DeviseSecurityExtension
       # controller instance methods
 
         private
-
+        
         # lookup if an password change needed
         def handle_password_change
           if not devise_controller? and not ignore_password_expire? and not request.format.nil? and request.format.html?

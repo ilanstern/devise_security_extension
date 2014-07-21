@@ -21,6 +21,9 @@ Warden::Manager.after_set_user :only => :fetch do |record, warden, options|
     if record.unique_session_id != warden.session(scope)['unique_session_id'] && !env['devise.skip_session_limitable']
       warden.logout(scope)
       throw :warden, :scope => scope, :message => :session_limited
+    elsif !record.active?
+      warden.logout(scope)
+      throw :warden, :scope => scope, :message => :deactivated
     end
   end
 end
