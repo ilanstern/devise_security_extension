@@ -4,7 +4,8 @@ module DeviseSecurityExtension
       extend ActiveSupport::Concern
 
       included do
-        before_filter :handle_password_change
+        before_filter      :handle_password_change
+        skip_before_filter :handle_password_change, only: :destroy
       end
       
       module ClassMethods
