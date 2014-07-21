@@ -26,8 +26,8 @@ module DeviseSecurityExtension
 
         # lookup if an password change needed
         def handle_password_change
-          handle_two_factor_authentication
           if not devise_controller? and not ignore_password_expire? and not request.format.nil? and request.format.html?
+            handle_two_factor_authentication
             Devise.mappings.keys.flatten.any? do |scope|
               if signed_in?(scope) and warden.session(scope)[:password_expired] and not warden.session(scope)[:need_two_factor_authentication]
                 session["#{scope}_return_to"] = request.path if request.get?
