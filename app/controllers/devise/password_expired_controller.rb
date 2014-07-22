@@ -23,7 +23,7 @@ class Devise::PasswordExpiredController < ActiveAdmin::Devise::SessionsControlle
       sign_in resource_name, resource, :bypass => true
 
       redirection_path = 
-        if ActiveRecord::Base.connection.table_exists? 'current_namespaces' and CurrentNamespace.count > 0 and !Rails.env.development?
+        if ActiveRecord::Base.connection.table_exists? 'current_namespaces' and CurrentNamespace.count > 0
           CurrentNamespace.last.current_namespace.to_sym || "/admin"
         else
           "/admin"
